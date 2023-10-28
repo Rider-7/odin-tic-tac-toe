@@ -42,8 +42,8 @@ const gameController = () => {
     const Computer = (marker) => {
         const {name, type} = Player('Computer', marker, 'computer');
         
-        const randomSelection = (gameboard) => {
-            const legalCellsIdxs = gameboard.getLegalCells();
+        const randomSelection = () => {
+            const legalCellsIdxs = gameboardInstance.getLegalCells();
             const selection = legalCellsIdxs[Math.floor(Math.random() * (legalCellsIdxs.length))];
             console.log(legalCellsIdxs, selection);
             return selection;
