@@ -1,3 +1,5 @@
+// setupPlayers ->
+// startGame ->
 
 const gameboard = (() => {
 
@@ -41,7 +43,7 @@ const gameController = (() => {
         
         const randomSelection = () => {
             const legalCellsIdxs = gameboard.getLegalCells();
-            const selection = legalCellsIdxs[Math.round(Math.random() * (legalCellsIdxs.length))];
+            const selection = legalCellsIdxs[Math.floor(Math.random() * (legalCellsIdxs.length))];
             console.log(legalCellsIdxs, selection);
             return selection;
         }
@@ -62,6 +64,7 @@ const gameController = (() => {
 
     const board = gameboard.getBoard();
 
+
     const playTurn = (cell) => {
         if (activePlayer.type === 'computer') gameboard.markCell(activePlayer.marker, activePlayer.randomSelection());
         if (activePlayer.type === 'human') gameboard.markCell(activePlayer.marker, cell);
@@ -78,7 +81,8 @@ const gameController = (() => {
 
     const switchActivePlayer = () => activePlayer = (activePlayer == player1) ? player2 : player1;
 
-    // Method - Check for winning/draw conditions.
+    const getActivePlayer = () => activePlayer;
+
     const getGameStatus = () => {
 
         const isRowWinner = (function validateRows() {
@@ -117,7 +121,7 @@ const gameController = (() => {
         return 'in-play';
     }
 
-    return {playTurn};
+    return {playTurn, getBoard: gameboard.getBoard, getActivePlayer};
 })();
 
 const screenController = (() => {
@@ -134,11 +138,12 @@ const screenController = (() => {
     }
 
     const updateScreen = () => {
-        const board = gameboard.getBoard();
+        const board = gameController.getBoard();
         const cellDivs = [...document.querySelectorAll('.cell')];
         const boardMarkers = board.flat();
 
         cellDivs.forEach((cellDiv, i) => cellDiv.textContent = boardMarkers[i]);
+        document.querySelector('.turn').textContent = gameController.getActivePlayer().name;
     };
 
     const gameboardClickHandler = (e) => {
