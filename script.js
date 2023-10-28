@@ -1,7 +1,7 @@
 // setupPlayers ->
 // startGame ->
 
-const gameboard = (() => {
+const gameboard = () => {
 
     const board = (function createBoard() {
         const board = [];
@@ -28,10 +28,11 @@ const gameboard = (() => {
     }
 
     return {getBoard, printBoard, markCell, getLegalCells}
-})();
+};
 
-const gameController = (() => {
+const gameController = () => {
 
+    
     // Factory Function - Player
     const Player = (name, marker, type) => {
         return {name, marker, type};
@@ -41,7 +42,7 @@ const gameController = (() => {
     const Computer = (marker) => {
         const {name, type} = Player('Computer', marker, 'computer');
         
-        const randomSelection = () => {
+        const randomSelection = (gameboard) => {
             const legalCellsIdxs = gameboard.getLegalCells();
             const selection = legalCellsIdxs[Math.floor(Math.random() * (legalCellsIdxs.length))];
             console.log(legalCellsIdxs, selection);
@@ -56,27 +57,18 @@ const gameController = (() => {
         return {name, marker, type}
     }
 
-    const player1 = Human('Tom', 'X');
-    const player2 = Computer('O');
-
-    let activePlayer = (Math.round(Math.random())) ? player1 : player2;
-    console.log(`${activePlayer.name} goes first!`); // debug
-
-    const board = gameboard.getBoard();
-
-
     const playTurn = (cell) => {
-        if (activePlayer.type === 'computer') gameboard.markCell(activePlayer.marker, activePlayer.randomSelection());
-        if (activePlayer.type === 'human') gameboard.markCell(activePlayer.marker, cell);
+        if (activePlayer.type === 'computer') gameboardInstance.markCell(activePlayer.marker, activePlayer.randomSelection(gameboardInstance));
+        if (activePlayer.type === 'human') gameboardInstance.markCell(activePlayer.marker, cell);
         screenController.updateScreen();
-        gameboard.printBoard(); // debug
+        gameboardInstance.printBoard(); // debug
 
         const gameStatus = getGameStatus();
         if(gameStatus === 'win') return console.log(`${activePlayer.name} wins!`); // debug
         if(gameStatus === 'draw') return console.log("Draw!"); // debug
 
         switchActivePlayer();
-        if (activePlayer.type === 'computer') playTurn();
+        // if (activePlayer.type === 'computer') playTurn();
     };
 
     const switchActivePlayer = () => activePlayer = (activePlayer == player1) ? player2 : player1;
@@ -121,10 +113,22 @@ const gameController = (() => {
         return 'in-play';
     }
 
-    return {playTurn, getBoard: gameboard.getBoard, getActivePlayer};
-})();
+    // Game Initialisation
+    const gameboardInstance = gameboard();
+    const board = gameboardInstance.getBoard();
+    const gameSelection = (() => prompt('Enter 1 for 2 Player PVP, or 2 to play against the computer:'))();
+    const player1 = Human(prompt("Please enter Player 1's name:"), 'X');
+    const player2 = (gameSelection === '1') ? Human(prompt("Please enter Player 2's name"), 'O') : Computer('O');
+    let activePlayer = (Math.round(Math.random())) ? player1 : player2;
+
+
+
+    return {playTurn, getBoard: gameboardInstance.getBoard, getActivePlayer};
+};
 
 const screenController = (() => {
+
+    const game = gameController();
 
     const gameboardDiv = document.querySelector('.gameboard');
 
@@ -137,20 +141,24 @@ const screenController = (() => {
         gameboardDiv.appendChild(cellButton);
     }
 
+    document.querySelector('.turn').textContent = game.getActivePlayer().name;
+
     const updateScreen = () => {
-        const board = gameController.getBoard();
+        const board = game.getBoard();
+        const activePlayer = game.getActivePlayer();
         const cellDivs = [...document.querySelectorAll('.cell')];
         const boardMarkers = board.flat();
 
         cellDivs.forEach((cellDiv, i) => cellDiv.textContent = boardMarkers[i]);
-        document.querySelector('.turn').textContent = gameController.getActivePlayer().name;
+        document.querySelector('.turn').textContent = activePlayer.name;
+        console.log(activePlayer.name);
     };
 
     const gameboardClickHandler = (e) => {
         const Cell = e.target.dataset.index;
         if (!Cell) return;
 
-        gameController.playTurn(Cell);
+        game.playTurn(Cell);
     }
 
     gameboardDiv.addEventListener('click', gameboardClickHandler);
