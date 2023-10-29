@@ -1,5 +1,6 @@
-// setupPlayers ->
+// setupPlayers -> ok
 // startGame ->
+// validateSelection -> ok
 
 const gameboard = () => {
 
@@ -59,7 +60,11 @@ const gameController = () => {
 
     const playTurn = (cell) => {
         if (activePlayer.type === 'computer') gameboardInstance.markCell(activePlayer.marker, activePlayer.randomSelection(gameboardInstance));
-        if (activePlayer.type === 'human') gameboardInstance.markCell(activePlayer.marker, cell);
+        if (activePlayer.type === 'human') {
+            legalCells = gameboardInstance.getLegalCells();
+            if (!(legalCells.includes(cell))) return;
+            gameboardInstance.markCell(activePlayer.marker, cell);
+        }
         screenController.updateScreen();
         gameboardInstance.printBoard(); // debug
 
@@ -155,10 +160,8 @@ const screenController = (() => {
     };
 
     const gameboardClickHandler = (e) => {
-        const Cell = e.target.dataset.index;
-        if (!Cell) return;
-
-        game.playTurn(Cell);
+        if (!e.target.dataset.index) return;
+        game.playTurn(parseInt(e.target.dataset.index));
     }
 
     gameboardDiv.addEventListener('click', gameboardClickHandler);
