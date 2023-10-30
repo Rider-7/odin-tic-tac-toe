@@ -49,7 +49,7 @@ table {
 	border-spacing: 0;
 }
 
-/* ----- Styling ------ */
+/* ----- General Styling ------ */
 :root {
 	font-weight: 700;
 }
@@ -62,31 +62,62 @@ body {
 	align-items: center;
 }
 
-/* --- Option Styling --- */
-.option {
+/* --- Button Styling --- */
+.skew-container {
+	background-color: black;
+	color:white;
+	width: 100%;
 	display: flex;
+	justify-content: center;
+	align-items: center;
+
 }
 
-	.skew-container {
-		background-color: black;
-		color:white;
-		height:40px;
-		width: 700px;
-		display: flex;
-		justify-content: center;
-		align-items: center;
+	.skew-left{
+		transform: skew(45deg);
+	}
+
+		.skew-left > * {
+			transform: skew(-45deg);
+		}
+
+	.skew-right {
 		transform: skew(-45deg);
-}
+	}
 
-		.skew-container > *{
+		.skew-right > * {
 			transform: skew(45deg);
 		}
 
-		.skew-container.stripe {
-			width: 30px;
-			background-color: aqua;
+	.stripe {
+		width: 30px;
+		background-color: aqua;
+	}
+
+	.name {
+		display: flex;
+		justify-content: space-around;
+		gap: 32px;
+		width: 100%;
+		padding-inline: 32px;
+		text-wrap: nowrap;
+	}
+
+		.input-text {
+			width: 100%;
+			background-color: aliceblue;
 		}
 
+			.input-text > input {
+				box-sizing: border-box;
+				width: 100%;
+				background-color: transparent;
+				border: none;
+				outline: none;
+				padding-inline: 16px;
+			}
+
+/* --- Main Menu Styling --- */
 .main-menu {
 	display: flex;
 	flex-direction: column;
@@ -97,38 +128,48 @@ body {
 	height: 500px;
 }
 
-
-
-	.option > span {
-		transform: skew(45deg);
+	header {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
 	}
 
-header {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-}
+		.title {
+			font-size: 6rem;	
+		}
 
-	.title {
-		font-size: 6rem;	
+		.arrow {
+			display: inline;
+			height: 10px;
+			width: 100vw;
+			position: relative;
+			left: 30vw;
+			bottom: 8px;
+			background-color: aqua;
+		}
+
+		.subtitle {
+			position: relative;
+			bottom: 8px;
+			left: 10vw;
+		}
+
+	.option, .nav, .prev, .next {
+		display: flex;
+		height:40px;
 	}
 
-	.arrow {
-		display: inline;
-		height: 10px;
-		width: 100vw;
-		position: relative;
-		left: 30vw;
-		bottom: 8px;
-		background-color: aqua;
+	.option {
+		width: 700px;
 	}
-
-	.subtitle {
-		position: relative;
-		bottom: 8px;
-		left: 10vw;
+	
+	.nav {
+		gap: 64px;
 	}
-
+	
+		.prev, .next {
+			width: 250px;
+		}
 
 
 /* .gameboard {
