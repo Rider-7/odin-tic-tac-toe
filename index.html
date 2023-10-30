@@ -12,25 +12,113 @@
         <header>
             <span class= "title">TIC-TAC-TOE</span>
             <div class="arrow skew-right"></div>
-            <span class="subtitle">CHOOSE YOUR OPPONENET</span>
+            <span class="subtitle">CHOOSE YOUR OPPONENT</span>
         </header>
-        <div class="option">
-            <button class="skew-container skew-right"><span>Vs. Player</span></button>
+        <div class="option vs-player" href>
+            <button  class="skew-container skew-right"><span>VS. PLAYER</span></button>
             <div class="skew-right stripe"></div>
         </div>
-        <div class="option">
-            <button class="skew-container skew-right"><span>Vs. Com</span></button>
+        <div class="option vs-com">
+            <button class="skew-container skew-right"><span>VS. COM</span></button>
             <div class="skew-right stripe"></div>
         </div>
     </div>
 
-        <!-- <form method="POST" class="setup">
-            <div class="skew-container name"><label>Enter Your Name <input type="text"></label></div>
-        </form> -->
+    <template class="main-menu-template">
+        <div class = "main-menu">
+            <header>
+                <span class= "title">TIC-TAC-TOE</span>
+                <div class="arrow skew-right"></div>
+                <span class="subtitle">CHOOSE YOUR OPPONENT</span>
+            </header>
+            <div class="option vs-player" href>
+                <button  class="skew-container skew-right"><span>Vs. Player</span></button>
+                <div class="skew-right stripe"></div>
+            </div>
+            <div class="option vs-com">
+                <button class="skew-container skew-right"><span>Vs. Com</span></button>
+                <div class="skew-right stripe"></div>
+            </div>
+        </div>
+    </template>
 
-    <!-- <div class="turn">Tom's Turn!</div>
-    <div class="gameboard"></div> -->
+    <template class="vs-player-template">
+        <div class = "main-menu">
+            <header>
+                <span class= "title">VS. PLAYER</span>
+                <div class="arrow skew-right"></div>
+                <span class="subtitle">ENTER YOUR NAMES</span>
+            </header>
+            <div class="option">
+                <div class="skew-container skew-right">
+                    <label class="name">PLAYER 1<div class="input-text skew-right"><input type="text"></div></label>
+                </div>
+                <div class="skew-right stripe"></div>
+            </div>
+            <div class="option">
+                <div class="skew-container skew-right">
+                    <label class="name">PLAYER 1<div class="input-text skew-right"><input type="text"></div></label>
+                </div>
+                <div class="skew-right stripe"></div>
+            </div>
+            <div class="nav">
+                <div class="prev">
+                    <button class="skew-container skew-right"><span>RETURN</span></button>
+                    <div class="skew-right stripe"></div>
+                </div>
+                <div class="next">
+                    <div class="skew-left stripe"></div>
+                    <button class="skew-container skew-left"><span>START GAME</span></button>
+                </div>
+            </div>
+        </div>
+    </template>
 
+    <template class="vs-com-template">
+        <div class = "main-menu">
+            <header>
+                <span class= "title">VS. COM</span>
+                <div class="arrow skew-right"></div>
+                <span class="subtitle">ENTER YOUR NAME</span>
+            </header>
+            <div class="option">
+                <div class="skew-container skew-right">
+                    <label class="name">PLAYER 1<div class="input-text skew-right"><input type="text"></div></label>
+                </div>
+                <div class="skew-right stripe"></div>
+            </div>
+            <div class="nav">
+                <div class="prev">
+                    <button class="skew-container skew-right"><span>RETURN</span></button>
+                    <div class="skew-right stripe"></div>
+                </div>
+                <div class="next">
+                    <div class="skew-left stripe"></div>
+                    <button class="skew-container skew-left"><span>START GAME</span></button>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template class="game-template">
+        <div class="game">
+            <header class="turn">
+                <span class= "player-turn title">TOM'S TURN</span>
+                <div class="arrow skew-left"></div>
+            </header>
+            <div class="gameboard"></div>
+            <div class="nav">
+                <div class="prev">
+                    <button class="skew-container skew-right"><span>MAIN MENU</span></button>
+                    <div class="skew-right stripe"></div>
+                </div>
+                <div class="next">
+                    <div class="skew-left stripe"></div>
+                    <button class="skew-container skew-left"><span>PLAY AGAIN</span></button>
+                </div>
+            </div>
+        </div>
+    </template>
 
 </body>
 </html>

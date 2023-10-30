@@ -51,10 +51,22 @@ table {
 
 /* ----- General Styling ------ */
 :root {
+	--player1-colour: #6093E0;
+	--player2-colour: #E06060;
+	--com-colour: #E0CC60;
+	--accent-colour: #454745;
+	--bg-colour: #FDFDFD;
+
 	font-weight: 700;
 }
 
+* {
+	color: var(--accent-colour);
+}
+
+
 body {
+	background-color: var(--bg-colour);
     min-height: 100vh;
 	display: flex;
 	flex-direction: column;
@@ -62,15 +74,19 @@ body {
 	align-items: center;
 }
 
+
+
 /* --- Button Styling --- */
 .skew-container {
-	background-color: black;
-	color:white;
+	background-color: var(--accent-colour);
+	color: var(--bg-colour);
 	width: 100%;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-
+	transition: background-color 300ms;
+	border-width: 0;
+	/* border-width: 3px; */
 }
 
 	.skew-left{
@@ -90,6 +106,8 @@ body {
 		}
 
 	.stripe {
+		position: relative;
+		right:4px;
 		width: 30px;
 		background-color: aqua;
 	}
@@ -117,7 +135,13 @@ body {
 				padding-inline: 16px;
 			}
 
-/* --- Main Menu Styling --- */
+/* --- General Main Menu Styling --- */
+button > span {
+	color: var(--bg-colour);
+	font-weight: 700;
+	font-size: 2rem;
+}
+
 .main-menu, .game {
 	display: flex;
 	flex-direction: column;
@@ -145,18 +169,20 @@ body {
 			position: relative;
 			/* left: 30vw; */
 			bottom: 8px;
-			background-color: aqua;
+			background-color: var(--player1-colour);
 		}
 
 		.subtitle {
 			position: relative;
 			bottom: 8px;
 			left: 10vw;
+			
 		}
 
 	.option, .nav, .prev, .next {
 		display: flex;
-		height:40px;
+		height: 80px;
+		
 	}
 
 	.option {
@@ -172,9 +198,6 @@ body {
 		}
 
 /* --- Gameboard Styling --- */
-.turn {
-	/* width: 100%; */
-}
 
 .gameboard {
     display: grid;
@@ -189,4 +212,41 @@ body {
 .cell {
     background-color: rgb(255, 255, 255);
     color: black;
+}
+
+/* --- Specific Main Menu Styling --- */
+button > span {
+	color: var(--bg-colour);
+	font-weight: 700;
+	font-size: 2rem;
+}
+
+.vs-player > .stripe {
+	transition: background-color 300ms ;
+	background-color: var(--player2-colour);
+}
+
+.vs-player > .skew-container:hover {
+	transition: background-color 300ms ;
+	background-color: var(--player2-colour);
+}
+
+.vs-player > .skew-container:active {
+	transition: background-color 6ms ;
+	background-color: var(--accent-colour);
+}
+
+.vs-com > .stripe {
+	background-color: var(--com-colour);
+}
+
+
+.vs-com > .skew-container:hover {
+	transition: background-color 300ms ;
+	background-color: var(--com-colour);
+}
+
+.vs-com > .skew-container:active {
+	transition: background-color 60ms ;	
+	background-color: var(--accent-colour);
 }
