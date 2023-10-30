@@ -9,13 +9,26 @@
 </head>
 <body>
     <div class = "main-menu">
-        <header class= "title">Tic-Tac-Toe</header>
-        <button class="option vs-player">Vs. Player</button>
-        <button class="option vs-com">Vs. Com</button> 
+        <header>
+            <span class= "title">Tic-Tac-Toe</span>
+            <div class="arrow skew-container"></div>
+            <span class="subtitle">Choose Your Opponent</span>
+        </header>
+        <div class="option">
+            <button class="skew-container vs-player"><span>Vs. Player</span></button>
+            <div class="skew-container stripe"></div>
+        </div>
+        <div class="option">
+        <button class="skew-container vs-com"><span>Vs. Com</span></button>
+        <div class="skew-container stripe"></div>
+        </div>
     </div>
 
+        <!-- <form method="POST" class="setup">
+            <div class="skew-container name"><label>Enter Your Name <input type="text"></label></div>
+        </form> -->
 
-    <!-- <div class="turn"></div>
+    <!-- <div class="turn">Tom's Turn!</div>
     <div class="gameboard"></div> -->
 
 
