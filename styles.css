@@ -118,7 +118,7 @@ body {
 			}
 
 /* --- Main Menu Styling --- */
-.main-menu {
+.main-menu, .game {
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
@@ -171,16 +171,22 @@ body {
 			width: 250px;
 		}
 
+/* --- Gameboard Styling --- */
+.turn {
+	/* width: 100%; */
+}
 
-/* .gameboard {
+.gameboard {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     width: 400px;
     height: 400px;
     gap: 16px;
+	padding: 16px;
+	background-color: black;
 }
 
 .cell {
-    background-color: black;
-    color: white;
-} */
+    background-color: rgb(255, 255, 255);
+    color: black;
+}
