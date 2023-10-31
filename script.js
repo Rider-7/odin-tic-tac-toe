@@ -33,7 +33,7 @@ const gameboard = () => {
     return {getBoard, clearBoard, printBoard, markCell, getLegalCells}
 };
 
-const gameController = (screenController) => {
+const gameController = () => {
     
     // Factory Function - Player
     const Player = (name, marker, type) => {
@@ -196,13 +196,12 @@ const mainController = (() => {
     const clickHandler = (e) => {
         e.preventDefault();
 
-
-        const animationHandler = (e) => {
+        const selectHandler = (e) => {
             const template = getTemplate(templateId);
             body.replaceChild(template.content.cloneNode(true),body.lastElementChild);
-            const selectDivList = body.querySelectorAll('.select');
-            selectDivList.forEach(optionDiv => optionDiv.addEventListener('click', clickHandler))
             if (templateId === "game-template") startGame();
+            const selectDivList = body.querySelectorAll('.select');
+            selectDivList.forEach(selectDiv => selectDiv.addEventListener('click', clickHandler))
         }
 
         const templateId = e.currentTarget.dataset['templateId'];
@@ -210,7 +209,7 @@ const mainController = (() => {
 
         mainDiv.classList.remove('animate-left');
         void mainDiv.offsetWidth; // Trigger DOM reflow
-        mainDiv.addEventListener('animationend', animationHandler);
+        mainDiv.addEventListener('animationend', selectHandler);
         mainDiv.classList.add('animate-right-reverse');
 
 
@@ -218,7 +217,7 @@ const mainController = (() => {
 
     const body = document.querySelector('body');
 
-    (function initaliseController() {
+    (function initialise() {
         const template = getTemplate('main-menu-template');
         body.append(template.content.cloneNode(true));
 
