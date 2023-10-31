@@ -157,7 +157,7 @@ button > span {
 	font-size: 1.75rem;
 }
 
-.menu, .game {
+.main, .game {
 	display: flex;
 	flex-direction: column;
 	gap: 16px;

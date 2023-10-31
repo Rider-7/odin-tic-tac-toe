@@ -11,7 +11,7 @@
 <body>
 
     <template id="main-menu-template">
-        <div class = "menu animate-left">
+        <div class = "main animate-left">
             <header>
                 <span class= "title">TIC-TAC-TOE</span>
                 <div class="arrow skew-right"></div>
@@ -29,7 +29,7 @@
     </template>
 
     <template id="vs-player-template">
-        <form class = "menu animate-left">
+        <form class = "main animate-left">
             <header>
                 <span class= "title">VS. PLAYER</span>
                 <div class="arrow skew-right vs-player"></div>
@@ -61,7 +61,7 @@
     </template>
 
     <template id="vs-com-template">
-        <div class = "menu animate-left">
+        <div class = "main animate-left">
             <header>
                 <span class= "title">VS. COM</span>
                 <div class="arrow skew-right vs-com"></div>
@@ -87,14 +87,14 @@
     </template>
 
     <template id="game-template">
-        <div class="game animate-left">
-            <header class="turn">
-                <span class= "player-turn title">TOM'S TURN</span>
+        <div class="main game animate-left">
+            <header>
+                <span class= "title turn">TOM'S TURN</span>
                 <div class="arrow skew-left"></div>
             </header>
             <div class="gameboard"></div>
             <div class="nav">
-                <div class="prev">
+                <div class="prev player select" data-template-id="main-menu-template">
                     <button class="skew-container skew-right"><span>MAIN MENU</span></button>
                     <div class="skew-right stripe"></div>
                 </div>

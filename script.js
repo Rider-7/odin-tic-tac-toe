@@ -33,7 +33,7 @@ const gameboard = () => {
     return {getBoard, clearBoard, printBoard, markCell, getLegalCells}
 };
 
-const gameController = () => {
+const gameController = (screenController) => {
     
     // Factory Function - Player
     const Player = (name, marker, type) => {
@@ -60,8 +60,10 @@ const gameController = () => {
         return {name, marker, type}
     };
 
+    // TODO: Try to make gameStatus variable global within gameController.
     const playTurn = (cell) => {
-        if (gameStatus != 'in-play') return;
+        let gameStatus = getGameStatus();
+        if (gameStatus != 'in-play') return gameStatus;
 
         if (activePlayer.type === 'computer') gameboardInstance.markCell(activePlayer.marker, activePlayer.randomSelection(gameboardInstance));
         if (activePlayer.type === 'human') {
@@ -69,21 +71,20 @@ const gameController = () => {
             if (!(legalCells.includes(cell))) return;
             gameboardInstance.markCell(activePlayer.marker, cell);
         }
-
         gameStatus = getGameStatus();
+        if (gameStatus == 'win') return gameStatus;
         switchActivePlayer();
-        
-        screenController.updateScreen(gameStatus);
 
         // debug
         console.log(gameStatus)
         gameboardInstance.printBoard();
+
+        return gameStatus;
     };
 
     const restartGame = () => {
         gameboardInstance.clearBoard();
         board = gameboardInstance.getBoard();
-        gameStatus = 'in-play';
         activePlayer = (Math.round(Math.random())) ? player1 : player2;
     };
 
@@ -132,25 +133,20 @@ const gameController = () => {
     // Game Initialisation
     const gameboardInstance = gameboard();
     let board = gameboardInstance.getBoard();
-    let gameStatus = 'in-play';
     const gameSelection = (() => prompt('Enter 1 for 2 Player PVP, or 2 to play against the computer:'))();
     const player1 = Human(prompt("Please enter Player 1's name:"), 'X');
     const player2 = (gameSelection === '1') ? Human(prompt("Please enter Player 2's name"), 'O') : Computer('O');
     let activePlayer = (Math.round(Math.random())) ? player1 : player2;
-
-
 
     return {playTurn, restartGame, getBoard: gameboardInstance.getBoard, getActivePlayer};
 };
 
 const screenController = (() => {
 
-    const game = gameController();
 
     const gameDiv = document.querySelector('.game');
     const gameboardDiv = document.querySelector('.gameboard');
-    const nextDiv = document.querySelector('.nav > .next');
-
+    const game = gameController();
 
     // Create Tic-Tac-Toe HTML layout
     for (let i = 0; i < 9; i++) {
@@ -161,62 +157,63 @@ const screenController = (() => {
         gameDiv.querySelector('.gameboard').appendChild(cellButton);
     }
 
-    document.querySelector('.turn').textContent = game.getActivePlayer().name;
+    document.querySelector('.turn').textContent = `${game.getActivePlayer().name} GOES FIRST!`;
 
     const updateScreen = (gameStatus) => {
+        console.log(gameStatus)
 
         const board = game.getBoard();
         const activePlayer = game.getActivePlayer();
-        const cellDivs = [...document.querySelectorAll('.cell')];
 
+        const cellDivs = [...document.querySelectorAll('.cell')];
         cellDivs.forEach((cellDiv, i) => cellDiv.textContent = board[i]);
 
-        const playerTurnSpan = document.querySelector('.turn')
-
+        const playerTurnSpan = document.querySelector('.turn');
         if (gameStatus === 'win') playerTurnSpan.textContent = `${activePlayer.name} WINS!`;
-        else if (gameStatus === 'draw') playerTurnSpan.textContent = `Draw!`;
+        else if (gameStatus === 'draw') playerTurnSpan.textContent = `DRAW!`;
         else playerTurnSpan.textContent = `${activePlayer.name}'S TURN!`;
     };
 
     const gameboardClickHandler = (e) => {
-        if (e.target.dataset.index) game.playTurn(parseInt(e.target.dataset.index));
-    }
-
-    const navClickHandler = (e) => {
-         game.restartGame();
-         updateScreen();
+        if (e.target.dataset.index) {
+            gameStatus = game.playTurn(parseInt(e.target.dataset.index));
+            updateScreen(gameStatus);}
     }
 
     gameboardDiv.addEventListener('click', gameboardClickHandler);
-    nextDiv.addEventListener('click', navClickHandler);
-
-    return {updateScreen};
 });
 
-const menuController = (() => {
+const mainController = (() => {
 
     const getTemplate = (templateId) => {
                 return document.getElementById(templateId);
         }
 
+    const startGame = () => {
+        screenController();
+    }
+
     const clickHandler = (e) => {
         e.preventDefault();
 
+
         const animationHandler = (e) => {
             const template = getTemplate(templateId);
-            console.log(template, templateId)
             body.replaceChild(template.content.cloneNode(true),body.lastElementChild);
             const selectDivList = body.querySelectorAll('.select');
             selectDivList.forEach(optionDiv => optionDiv.addEventListener('click', clickHandler))
+            if (templateId === "game-template") startGame();
         }
 
         const templateId = e.currentTarget.dataset['templateId'];
-        const mainDiv = body.querySelector('.menu');
+        const mainDiv = body.querySelector('.main');
 
         mainDiv.classList.remove('animate-left');
         void mainDiv.offsetWidth; // Trigger DOM reflow
         mainDiv.addEventListener('animationend', animationHandler);
         mainDiv.classList.add('animate-right-reverse');
+
+
     };
 
     const body = document.querySelector('body');
@@ -226,7 +223,7 @@ const menuController = (() => {
         body.append(template.content.cloneNode(true));
 
         const selectDivList = body.querySelectorAll('.select');
-        selectDivList.forEach(optionDiv => optionDiv.addEventListener('click', clickHandler))
+        selectDivList.forEach(selectDiv => selectDiv.addEventListener('click', clickHandler))
     })();
 
 })();
