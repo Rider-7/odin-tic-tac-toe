@@ -55,6 +55,7 @@ table {
 	--player2-colour: #E06060;
 	--com-colour: #E0CC60;
 	--accent-colour: #454745;
+	--input-colour: #454745;
 	--bg-colour: #FDFDFD;
 
 	font-weight: 700;
@@ -76,7 +77,7 @@ body {
 
 
 
-/* --- Button Styling --- */
+/* --- Container Styling --- */
 .skew-container {
 	background-color: var(--accent-colour);
 	color: var(--bg-colour);
@@ -86,7 +87,7 @@ body {
 	align-items: center;
 	transition: background-color 300ms;
 	border-width: 0;
-	/* border-width: 3px; */
+	padding: 0;
 }
 
 	.skew-left{
@@ -107,23 +108,33 @@ body {
 
 	.stripe {
 		position: relative;
-		right:4px;
+		right:2px;
 		width: 30px;
-		background-color: aqua;
+		background-color: var(--player1-colour);
 	}
+
+		.next > .stripe {
+			left:2px;
+		}	
 
 	.name {
 		display: flex;
 		justify-content: space-around;
+		align-items: center;
 		gap: 32px;
 		width: 100%;
-		padding-inline: 32px;
+		height: 55%;
+		box-sizing: border-box;
+		padding-inline: 64px;
 		text-wrap: nowrap;
+
+		font-size: 2rem;
+		color: var(--bg-colour);
 	}
 
 		.input-text {
 			width: 100%;
-			background-color: aliceblue;
+			background-color: var(--bg-colour);
 		}
 
 			.input-text > input {
@@ -133,16 +144,20 @@ body {
 				border: none;
 				outline: none;
 				padding-inline: 16px;
+				font-size: 1.75rem;
+				text-align: center;
+				font-weight: 700;
+				color:var(--input-colour)
 			}
 
 /* --- General Main Menu Styling --- */
 button > span {
 	color: var(--bg-colour);
 	font-weight: 700;
-	font-size: 2rem;
+	font-size: 1.75rem;
 }
 
-.main-menu, .game {
+.menu, .game {
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
@@ -188,13 +203,14 @@ button > span {
 	.option {
 		width: 700px;
 	}
-	
+
 	.nav {
-		gap: 64px;
+		gap: 128px;
 	}
 	
 		.prev, .next {
-			width: 250px;
+			width: 270px;
+			/* fon */
 		}
 
 /* --- Gameboard Styling --- */
@@ -214,39 +230,106 @@ button > span {
     color: black;
 }
 
-/* --- Specific Main Menu Styling --- */
-button > span {
-	color: var(--bg-colour);
-	font-weight: 700;
-	font-size: 2rem;
+/* --- Specific Player Styling --- */
+	.player > .skew-container:hover {
+		transition: background-color 300ms;
+		background-color: var(--player1-colour);
+	}
+
+	.player > .skew-container:active {
+		transition: background-color 6ms;
+		background-color: var(--accent-colour);
+	}
+
+.player-inverse > .skew-container {
+	background-color: var(--player1-colour);
+}
+
+.player-inverse > .stripe {
+	background-color: var(--accent-colour);
+}
+
+.vs-player.arrow {
+	background-color: var(--player2-colour);
 }
 
 .vs-player > .stripe {
-	transition: background-color 300ms ;
 	background-color: var(--player2-colour);
 }
 
-.vs-player > .skew-container:hover {
-	transition: background-color 300ms ;
+	.vs-player > .skew-container:hover {
+		transition: background-color 300ms;
+		background-color: var(--player2-colour);
+	}
+
+	.vs-player > .skew-container:active {
+		transition: background-color 6ms;
+		background-color: var(--accent-colour);
+}
+
+.vs-player-inverse > .skew-container {
 	background-color: var(--player2-colour);
 }
 
-.vs-player > .skew-container:active {
-	transition: background-color 6ms ;
+.vs-player-inverse > .stripe {
 	background-color: var(--accent-colour);
+}
+
+.vs-com.arrow {
+	background-color: var(--com-colour);
 }
 
 .vs-com > .stripe {
 	background-color: var(--com-colour);
 }
 
+	.vs-com > .skew-container:hover {
+		transition: background-color 300ms;
+		background-color: var(--com-colour);
+	}
 
-.vs-com > .skew-container:hover {
-	transition: background-color 300ms ;
-	background-color: var(--com-colour);
+	.vs-com > .skew-container:active {
+		transition: background-color 60ms;	
+		background-color: var(--accent-colour);
 }
 
-.vs-com > .skew-container:active {
-	transition: background-color 60ms ;	
-	background-color: var(--accent-colour);
+/* --- Animations --- */
+/* Based on W3.CSS (Link: https://www.w3schools.com/w3css/default.asp) */
+.animate-left{
+	position:relative;
+	animation:animateleft 0.7s;
 }
+
+.animate-left-reverse{
+	position:relative;
+	animation:animateleft 0.7s;
+	animation-direction: reverse;
+}
+
+.animate-right-reverse{
+	position:relative;
+	animation:animateright 0.7s;
+	animation-direction: reverse;
+}
+
+	@keyframes animateleft{
+		from {
+			left: 200vw;
+			opacity:0;
+		}
+		
+		to {
+			left:0;opacity:1;
+		}
+	}
+
+	@keyframes animateright{
+		from {
+			right: 200vw;
+			opacity:0;
+		}
+		
+		to {
+			right:0;opacity:1;
+		}
+	}	

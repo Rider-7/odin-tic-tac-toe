@@ -191,4 +191,42 @@ const screenController = (() => {
     nextDiv.addEventListener('click', navClickHandler);
 
     return {updateScreen};
+});
+
+const menuController = (() => {
+
+    const getTemplate = (templateId) => {
+                return document.getElementById(templateId);
+        }
+
+    const clickHandler = (e) => {
+        e.preventDefault();
+
+        const animationHandler = (e) => {
+            const template = getTemplate(templateId);
+            console.log(template, templateId)
+            body.replaceChild(template.content.cloneNode(true),body.lastElementChild);
+            const selectDivList = body.querySelectorAll('.select');
+            selectDivList.forEach(optionDiv => optionDiv.addEventListener('click', clickHandler))
+        }
+
+        const templateId = e.currentTarget.dataset['templateId'];
+        const mainDiv = body.querySelector('.menu');
+
+        mainDiv.classList.remove('animate-left');
+        void mainDiv.offsetWidth; // Trigger DOM reflow
+        mainDiv.addEventListener('animationend', animationHandler);
+        mainDiv.classList.add('animate-right-reverse');
+    };
+
+    const body = document.querySelector('body');
+
+    (function initaliseController() {
+        const template = getTemplate('main-menu-template');
+        body.append(template.content.cloneNode(true));
+
+        const selectDivList = body.querySelectorAll('.select');
+        selectDivList.forEach(optionDiv => optionDiv.addEventListener('click', clickHandler))
+    })();
+
 })();
