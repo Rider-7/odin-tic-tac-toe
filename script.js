@@ -58,7 +58,6 @@ const gameController = (player1Name, player2Name, isVsCom) => {
         return {name, marker, type}
     };
 
-    // TODO: Try to make gameStatus variable global within gameController.
     const playTurn = (cell) => {
         let gameStatus = getGameStatus();
         if (gameStatus != 'in-play') return gameStatus;
@@ -180,7 +179,6 @@ const mainController = (() => {
         }
 
         const restartDiv = document.querySelector('.restart');
-        console.log(restartDiv)
         restartDiv.removeEventListener('click', selectHandler);
         restartDiv.addEventListener('click', restartHandler);
     

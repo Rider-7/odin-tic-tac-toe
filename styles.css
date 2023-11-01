@@ -166,6 +166,10 @@ button > span {
 	height: 500px;
 }
 
+.game {
+	height: 700px;
+}
+
 	header {
 		display: flex;
 		flex-direction: column;
@@ -176,6 +180,7 @@ button > span {
 		.title {
 			font-size: 6rem;
 			text-align: center;	
+			text-wrap: nowrap;
 		}
 
 		.arrow {
@@ -218,17 +223,21 @@ button > span {
 
 .gameboard {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    width: 400px;
-    height: 400px;
+    grid-template-columns: repeat(3, 8rem);
+	grid-template-rows: repeat(3, 8rem);
+    /* width: 600px; */
+    /* height: 600px; */
     gap: 16px;
 	padding: 16px;
-	background-color: black;
+	border-radius: 10px;
+	background-color: var(--accent-colour);
 }
 
 .cell {
-    background-color: rgb(255, 255, 255);
-    color: black;
+    /* background-color: var(--input-colour); */
+	font-size: 4rem;
+	font-weight: 700;
+	border-radius: 4px;
 }
 
 /* --- Specific Player Styling --- */
