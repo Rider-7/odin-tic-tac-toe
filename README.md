@@ -2,7 +2,7 @@
 A client-side tic-tac-toe SPA using HTML5, CSS and JS without any frameworks. 
 
 ## How to Play
-Use the link below to play!
+Use the following link to play!  
 GitHub Pages link: https://rider-7.github.io/odin-tic-tac-toe/
 
 ## Features
