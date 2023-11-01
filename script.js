@@ -42,13 +42,11 @@ const gameController = (player1Name, player2Name, isVsCom) => {
 
     // Factory Function - Computer Player extends Player
     const Computer = (marker) => {
-        const {name, type} = Player('Computer', marker, 'computer');
+        const {name, type} = Player('COM', marker, 'computer');
         
         const randomSelection = () => {
             const legalCellsIdxs = gameboardInstance.getLegalCells();
             const selection = legalCellsIdxs[Math.floor(Math.random() * (legalCellsIdxs.length))];
-            // debug
-            console.log(legalCellsIdxs, selection);
             return selection;
         }
         return {name, marker, type, randomSelection}
@@ -75,8 +73,6 @@ const gameController = (player1Name, player2Name, isVsCom) => {
         if (gameStatus == 'win') return gameStatus;
         switchActivePlayer();
 
-        // debug
-        console.log(gameStatus)
         gameboardInstance.printBoard();
 
         return gameStatus;
@@ -134,7 +130,6 @@ const gameController = (player1Name, player2Name, isVsCom) => {
     const gameboardInstance = gameboard();
     let board = gameboardInstance.getBoard();
     const player1 = Human(player1Name, 'X');
-    console.log(isVsCom)//d
     const player2 = (isVsCom) ? Computer('O') : Human(player2Name, 'O');
     let activePlayer = (Math.round(Math.random())) ? player1 : player2;
 
@@ -160,7 +155,6 @@ const mainController = (() => {
         document.querySelector('.turn').textContent = `${game.getActivePlayer().name} GOES FIRST!`;
     
         const updateScreen = (gameStatus) => {
-            console.log(gameStatus)
     
             const board = game.getBoard();
             const activePlayer = game.getActivePlayer();
@@ -179,6 +173,16 @@ const mainController = (() => {
                 gameStatus = game.playTurn(parseInt(e.target.dataset.index));
                 updateScreen(gameStatus);}
         }
+
+        const restartHandler = (e) => {
+            game.restartGame();
+            updateScreen();
+        }
+
+        const restartDiv = document.querySelector('.restart');
+        console.log(restartDiv)
+        restartDiv.removeEventListener('click', selectHandler);
+        restartDiv.addEventListener('click', restartHandler);
     
         gameboardDiv.addEventListener('click', gameboardClickHandler);
     } 
@@ -191,7 +195,6 @@ const mainController = (() => {
             selectDiv.querySelectorAll('button').forEach(button => button.setAttribute('disabled',''));
         });
         const selectDiv = e.currentTarget;
-        console.log(selectDiv);
         if (selectDiv.hasAttribute('data-template-id')) templateControls.changeTemplate(selectDiv.dataset.templateId);
         }
 
@@ -240,14 +243,15 @@ const mainController = (() => {
             if(templateId === 'game-template') {
                 if (body.querySelector('.player-1-name')) {
                     const inputName = body.querySelector('.player-1-name').value;
-                    if (inputName) player1Name = inputName;
+                    if (inputName) player1Name = inputName.toUpperCase();
                     else player1Name = 'PLAYER 1';
                 }
                 if (body.querySelector('.player-2-name')) {
                     const inputName = body.querySelector('.player-2-name').value;
-                    if (inputName) player2Name = inputName;
+                    if (inputName) player2Name = inputName.toUpperCase();
                     else player2Name = 'PLAYER 2';
                 }
+
                 isVsCom = (!body.querySelector('.player-2-name')) ? true : false;
             }
 
