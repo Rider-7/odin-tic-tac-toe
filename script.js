@@ -33,7 +33,7 @@ const gameboard = () => {
     return {getBoard, clearBoard, printBoard, markCell, getLegalCells}
 };
 
-const gameController = () => {
+const gameController = (player1Name, player2Name, isVsCom) => {
     
     // Factory Function - Player
     const Player = (name, marker, type) => {
@@ -133,96 +133,139 @@ const gameController = () => {
     // Game Initialisation
     const gameboardInstance = gameboard();
     let board = gameboardInstance.getBoard();
-    const gameSelection = (() => prompt('Enter 1 for 2 Player PVP, or 2 to play against the computer:'))();
-    const player1 = Human(prompt("Please enter Player 1's name:"), 'X');
-    const player2 = (gameSelection === '1') ? Human(prompt("Please enter Player 2's name"), 'O') : Computer('O');
+    const player1 = Human(player1Name, 'X');
+    console.log(isVsCom)//d
+    const player2 = (isVsCom) ? Computer('O') : Human(player2Name, 'O');
     let activePlayer = (Math.round(Math.random())) ? player1 : player2;
 
     return {playTurn, restartGame, getBoard: gameboardInstance.getBoard, getActivePlayer};
 };
 
-const screenController = (() => {
-
-
-    const gameDiv = document.querySelector('.game');
-    const gameboardDiv = document.querySelector('.gameboard');
-    const game = gameController();
-
-    // Create Tic-Tac-Toe HTML layout
-    for (let i = 0; i < 9; i++) {
-        const cellButton = document.createElement('button');
-        cellButton.setAttribute('class', 'cell');
-        cellButton.setAttribute('type', 'button');
-        cellButton.dataset.index = i;
-        gameDiv.querySelector('.gameboard').appendChild(cellButton);
-    }
-
-    document.querySelector('.turn').textContent = `${game.getActivePlayer().name} GOES FIRST!`;
-
-    const updateScreen = (gameStatus) => {
-        console.log(gameStatus)
-
-        const board = game.getBoard();
-        const activePlayer = game.getActivePlayer();
-
-        const cellDivs = [...document.querySelectorAll('.cell')];
-        cellDivs.forEach((cellDiv, i) => cellDiv.textContent = board[i]);
-
-        const playerTurnSpan = document.querySelector('.turn');
-        if (gameStatus === 'win') playerTurnSpan.textContent = `${activePlayer.name} WINS!`;
-        else if (gameStatus === 'draw') playerTurnSpan.textContent = `DRAW!`;
-        else playerTurnSpan.textContent = `${activePlayer.name}'S TURN!`;
-    };
-
-    const gameboardClickHandler = (e) => {
-        if (e.target.dataset.index) {
-            gameStatus = game.playTurn(parseInt(e.target.dataset.index));
-            updateScreen(gameStatus);}
-    }
-
-    gameboardDiv.addEventListener('click', gameboardClickHandler);
-});
-
 const mainController = (() => {
 
-    const getTemplate = (templateId) => {
-                return document.getElementById(templateId);
+    function startGame(player1Name, player2Name, isVsCom) {
+        const gameDiv = document.querySelector('.game');
+        const gameboardDiv = document.querySelector('.gameboard');
+        const game = gameController(player1Name, player2Name, isVsCom);
+    
+        // Create Tic-Tac-Toe HTML layout
+        for (let i = 0; i < 9; i++) {
+            const cellButton = document.createElement('button');
+            cellButton.setAttribute('class', 'cell');
+            cellButton.setAttribute('type', 'button');
+            cellButton.dataset.index = i;
+            gameDiv.querySelector('.gameboard').appendChild(cellButton);
         }
+    
+        document.querySelector('.turn').textContent = `${game.getActivePlayer().name} GOES FIRST!`;
+    
+        const updateScreen = (gameStatus) => {
+            console.log(gameStatus)
+    
+            const board = game.getBoard();
+            const activePlayer = game.getActivePlayer();
+    
+            const cellDivs = [...document.querySelectorAll('.cell')];
+            cellDivs.forEach((cellDiv, i) => cellDiv.textContent = board[i]);
+    
+            const playerTurnSpan = document.querySelector('.turn');
+            if (gameStatus === 'win') playerTurnSpan.textContent = `${activePlayer.name} WINS!`;
+            else if (gameStatus === 'draw') playerTurnSpan.textContent = `DRAW!`;
+            else playerTurnSpan.textContent = `${activePlayer.name}'S TURN!`;
+        };
+    
+        const gameboardClickHandler = (e) => {
+            if (e.target.dataset.index) {
+                gameStatus = game.playTurn(parseInt(e.target.dataset.index));
+                updateScreen(gameStatus);}
+        }
+    
+        gameboardDiv.addEventListener('click', gameboardClickHandler);
+    } 
 
-    const startGame = () => {
-        screenController();
-    }
-
-    const clickHandler = (e) => {
+    function selectHandler(e) {
         e.preventDefault();
-
-        const selectHandler = (e) => {
-            const template = getTemplate(templateId);
-            body.replaceChild(template.content.cloneNode(true),body.lastElementChild);
-            if (templateId === "game-template") startGame();
-            const selectDivList = body.querySelectorAll('.select');
-            selectDivList.forEach(selectDiv => selectDiv.addEventListener('click', clickHandler))
+        const selectDivList = document.querySelectorAll('.select');
+        selectDivList.forEach(selectDiv => {
+            selectDiv.removeEventListener('click', selectHandler);
+            selectDiv.querySelectorAll('button').forEach(button => button.setAttribute('disabled',''));
+        });
+        const selectDiv = e.currentTarget;
+        console.log(selectDiv);
+        if (selectDiv.hasAttribute('data-template-id')) templateControls.changeTemplate(selectDiv.dataset.templateId);
         }
 
-        const templateId = e.currentTarget.dataset['templateId'];
-        const mainDiv = body.querySelector('.main');
+    const templateControls = (() => {
 
-        mainDiv.classList.remove('animate-left');
-        void mainDiv.offsetWidth; // Trigger DOM reflow
-        mainDiv.addEventListener('animationend', selectHandler);
-        mainDiv.classList.add('animate-right-reverse');
+        const animation = (() => { 
+            function removeAnimation (e, animation) {
+                void e.target.offsetWidth; // Trigger DOM reflow
+                e.target.classList.remove(animation);
+            }
 
+            function animateLeft(element) {
+                const animation = 'animate-left'
+                element.addEventListener('animationend', (e) => removeAnimation(e, animation));
+                element.classList.add(animation);
+            }
 
-    };
+            function animateRightReverse(element) {
+                const animation = 'animate-right-reverse'
+                element.addEventListener('animationend', (e) => removeAnimation(e, animation));
+                element.classList.add('animate-right-reverse');
+            }
+            
+            return {animateLeft, animateRightReverse};
+        })();
 
-    const body = document.querySelector('body');
+        function getTemplateContent (templateId) {
+            return document.getElementById(templateId).content;
+        }
 
-    (function initialise() {
-        const template = getTemplate('main-menu-template');
-        body.append(template.content.cloneNode(true));
+        function changeTemplate(templateId) {
+            const oldTemplateContent = document.querySelector('.main');
+            animation.animateRightReverse(oldTemplateContent);
+    
+            oldTemplateContent.addEventListener('animationend', () => initaliseTemplate(templateId));
+        }
 
-        const selectDivList = body.querySelectorAll('.select');
-        selectDivList.forEach(selectDiv => selectDiv.addEventListener('click', clickHandler))
+        function initaliseTemplate(templateId) {
+            
+            const newTemplateContentFragment = getTemplateContent(templateId);
+            const body = document.querySelector('body');
+
+            let player1Name;
+            let player2Name;
+            let isVsCom;
+            if(templateId === 'game-template') {
+                if (body.querySelector('.player-1-name')) {
+                    const inputName = body.querySelector('.player-1-name').value;
+                    if (inputName) player1Name = inputName;
+                    else player1Name = 'PLAYER 1';
+                }
+                if (body.querySelector('.player-2-name')) {
+                    const inputName = body.querySelector('.player-2-name').value;
+                    if (inputName) player2Name = inputName;
+                    else player2Name = 'PLAYER 2';
+                }
+                isVsCom = (!body.querySelector('.player-2-name')) ? true : false;
+            }
+
+            body.replaceChild(newTemplateContentFragment.cloneNode(true), body.lastElementChild);
+            
+            const newTemplateContent = document.querySelector('.main');
+            animation.animateLeft(newTemplateContent);
+            
+            const selectDivList = body.querySelectorAll('.select');
+            selectDivList.forEach(selectDiv => selectDiv.addEventListener('click', selectHandler));
+
+            if(templateId === 'game-template') startGame(player1Name, player2Name, isVsCom);
+        }
+
+        return {changeTemplate, initaliseTemplate};
+
     })();
+
+        templateControls.initaliseTemplate('main-menu-template');
 
 })();
