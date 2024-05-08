@@ -19,6 +19,3 @@ Figma Mockup: https://www.figma.com/file/NkD5i89QShFjM0Lb4JkTy6/Tic-Tac-Toe?type
 
 ### Project Basis
 Project based on: https://www.theodinproject.com/lessons/node-path-javascript-tic-tac-toe
-
-## Author ~~Thoughts~~ Regrets 
-I REALLY regret making it an SPA. Making the animations, wrangling the event listeners, organising the codebase and everything else needed for to make it an SPA by hand without any framework(s), I regret all of it.
